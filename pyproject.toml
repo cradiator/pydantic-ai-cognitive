@@ -32,7 +32,7 @@ dev = [
     "ty>=0.0.1a32",
     "pytest-cov>=7.0.0",
     "ruff>=0.14.8",
-    
+
 ]
 
 [build-system]
@@ -106,4 +106,3 @@ skip_empty = true
 [tool.coverage.run]
 branch = true
 source = ["src"]
-
