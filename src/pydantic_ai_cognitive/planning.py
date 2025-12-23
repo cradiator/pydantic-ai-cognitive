@@ -35,7 +35,9 @@ class PlanningContext:
 
 
 def _get_context(ctx: RunContext[object]) -> PlanningContext:
-    target = ctx.deps if ctx.deps is not None else ctx
+    target = ctx.deps
+    if target is None:
+        raise ValueError("Agent must run with a deps object")
 
     if not hasattr(target, "_planning_context"):
         # A hackey way to add private deps to the context
@@ -43,7 +45,7 @@ def _get_context(ctx: RunContext[object]) -> PlanningContext:
 
     context = target._planning_context  # type: ignore[attr-defined]
     if not isinstance(context, PlanningContext):
-        raise TypeError("Planning context is not an instance of PlanningContext")  # noqa: TRY003 long exception message
+        raise TypeError("Planning context is not an instance of PlanningContext")
 
     return context
 

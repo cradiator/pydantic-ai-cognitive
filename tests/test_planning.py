@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime
 
 import pytest
@@ -12,7 +13,6 @@ from pydantic_ai.messages import (
 )
 
 from pydantic_ai_cognitive.planning import (
-    PlanningContext,
     plan_create,
     plan_history_processor,  # Added import
     plan_mark_step_complete,
@@ -20,10 +20,14 @@ from pydantic_ai_cognitive.planning import (
 )
 
 
+@dataclass
+class AgentDeps:
+    pass
+
+
 class MockRunContext:
     def __init__(self):
-        self._planning_context = PlanningContext()
-        self.deps = None
+        self.deps = AgentDeps()
 
 
 @pytest.fixture
@@ -32,16 +36,13 @@ def ctx():
 
 
 def test_plan_create(ctx):
-    # Ensure fresh context
-    ctx._planning_context = PlanningContext()
-
     steps = ["Step 1", "Step 2"]
     result = plan_create(ctx, steps)
     assert "1. Step 1" in result
     assert "2. Step 2" in result
     assert "[ ] 1" in result
 
-    assert len(ctx._planning_context.steps) == 2
+    assert len(ctx.deps._planning_context.steps) == 2
 
 
 def test_plan_mark_step_complete(ctx):
