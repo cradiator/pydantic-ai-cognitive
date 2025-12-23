@@ -10,8 +10,8 @@ check: ## Run code quality tools.
 	@uv lock --locked
 	@echo "🚀 Linting code: Running pre-commit"
 	@uv run pre-commit run -a
-	@echo "🚀 Static type checking: Running ty"
-	@uv run ty check
+	@echo "🚀 Static type checking: Running mypy"
+	@uv run mypy src tests
 	@echo "🚀 Checking for obsolete dependencies: Running deptry"
 	@uv run deptry src
 

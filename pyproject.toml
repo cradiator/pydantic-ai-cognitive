@@ -17,6 +17,9 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+dependencies = [
+    "pydantic-ai>=1.38.0",
+]
 
 [project.urls]
 Homepage = "https://cradiator.github.io/pydantic-ai-cognitive/"
@@ -32,7 +35,7 @@ dev = [
     "ty>=0.0.1a32",
     "pytest-cov>=7.0.0",
     "ruff>=0.14.8",
-
+    "mypy>=1.19.1",
 ]
 
 [build-system]
