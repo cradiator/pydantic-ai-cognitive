@@ -14,9 +14,10 @@ Cognitive toolsets for [pydantic-ai](https://github.com/pydantic/pydantic-ai).
 
 The `planning` module enables agents to create, track, and execute step-by-step plans.
 
-*   **TOOLSET**: `plan_create`, `plan_mark_step_complete`, `plan_show_progress`
+*   **Planning Class**: `Planning` encapuslates the state of the plan.
+*   **Toolset**: `Planning.toolset()` returns a toolset with bound methods: `plan_create`, `plan_mark_step_complete`, `plan_show_progress`.
 *   **System Prompt**: Includes `INSTRUCTION` to guide the agent in using the planning tools.
-*   **History Management**: Includes `HISTORY_PROCESSOR` to automatically clean up redundant planning steps from context, keeping the history token-efficient.
+*   **History Management**: `Planning.plan_history_processor` automatically cleans up redundant planning steps from context, keeping the history token-efficient.
 
 
 ## Usage
@@ -42,7 +43,7 @@ agent = Agent(
 result = agent.run_sync(
     "Create a plan to write a short poem about Python, then write it.",
 )
-print(result.data)
+print(result.output)
 ```
 
 ## Development
