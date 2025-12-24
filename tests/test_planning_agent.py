@@ -6,7 +6,7 @@ import pytest
 from pydantic_ai import Agent, ModelMessage, ModelResponse, TextPart, ToolCallPart, ToolReturnPart
 from pydantic_ai.models.function import AgentInfo, FunctionModel
 
-from pydantic_ai_cognitive import planning
+from pydantic_ai_cognitive.planning import Planning
 from pydantic_ai_cognitive.utils import EnumerateMessageWithParts
 
 pytestmark = pytest.mark.anyio
@@ -96,10 +96,12 @@ def test_planning_agent_flow() -> None:
 
         return ModelResponse(parts=[TextPart("Unexpected call")])
 
+    planning = Planning()
+
     agent: Agent[AgentDeps, str] = Agent(
         model=FunctionModel(model_function),
-        toolsets=[planning.TOOLSET],
-        history_processors=[planning.HISTORY_PROCESSOR],
+        toolsets=[planning.toolset()],
+        history_processors=[planning.plan_history_processor],
         deps_type=AgentDeps,
         output_type=str,
     )

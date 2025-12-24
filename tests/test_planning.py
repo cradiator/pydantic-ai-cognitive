@@ -1,7 +1,5 @@
-from dataclasses import dataclass
 from datetime import datetime
 
-import pytest
 from pydantic_ai.messages import (
     ModelRequest,
     ModelResponse,
@@ -12,62 +10,46 @@ from pydantic_ai.messages import (
     UserPromptPart,
 )
 
-from pydantic_ai_cognitive.planning import (
-    plan_create,
-    plan_history_processor,  # Added import
-    plan_mark_step_complete,
-    plan_show_progress,
-)
+from pydantic_ai_cognitive.planning import Planning
 
 
-@dataclass
-class AgentDeps:
-    pass
-
-
-class MockRunContext:
-    def __init__(self):
-        self.deps = AgentDeps()
-
-
-@pytest.fixture
-def ctx():
-    return MockRunContext()
-
-
-def test_plan_create(ctx):
+def test_plan_create():
+    planning = Planning()
     steps = ["Step 1", "Step 2"]
-    result = plan_create(ctx, steps)
+    result = planning.plan_create(steps)
     assert "1. Step 1" in result
     assert "2. Step 2" in result
     assert "[ ] 1" in result
 
-    assert len(ctx.deps._planning_context.steps) == 2
+    assert len(planning.steps) == 2
 
 
-def test_plan_mark_step_complete(ctx):
-    plan_create(ctx, ["Do X", "Do Y"])
+def test_plan_mark_step_complete():
+    planning = Planning()
+    planning.plan_create(["Do X", "Do Y"])
 
-    result = plan_mark_step_complete(ctx, 1)
+    result = planning.plan_mark_step_complete(1)
     assert "[x] 1" in result
     assert "[ ] 2" in result
 
-    result = plan_mark_step_complete(ctx, 2)
+    result = planning.plan_mark_step_complete(2)
     assert "[x] 2" in result
 
-    result = plan_mark_step_complete(ctx, 99)
+    result = planning.plan_mark_step_complete(99)
     assert "Step 99 not found" in result
 
 
-def test_plan_show_progress(ctx):
-    plan_create(ctx, ["A", "B"])
-    result = plan_show_progress(ctx)
+def test_plan_show_progress():
+    planning = Planning()
+    planning.plan_create(["A", "B"])
+    result = planning.plan_show_progress()
     assert "Current Plan:" in result
     assert "[ ] 1. A" in result
     assert "[ ] 2. B" in result
 
 
-def test_plan_history_processor(ctx):
+def test_plan_history_processor():
+    planning = Planning()
     # Setup some timestamps
     ts = datetime.now()
 
@@ -203,7 +185,7 @@ def test_plan_history_processor(ctx):
     ]
 
     # Process
-    new_history = plan_history_processor(ctx, history)
+    new_history = planning.plan_history_processor(history)
 
     # Assertions
 

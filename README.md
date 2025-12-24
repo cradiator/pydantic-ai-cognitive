@@ -24,26 +24,23 @@ The `planning` module enables agents to create, track, and execute step-by-step 
 ```python
 from dataclasses import dataclass
 from pydantic_ai import Agent
-from pydantic_ai_cognitive import planning
+from pydantic_ai_cognitive.planning import Planning, INSTRUCTION
 
-@dataclass
-class Deps:
-    pass
+# Instantiate the planning toolset
+planning = Planning()
 
 agent = Agent(
     "openai:gpt-4o",
     # Add the planning instructions to the system prompt
-    instructions=planning.INSTRUCTION,
+    instructions=INSTRUCTION,
     # Register the planning toolset
-    toolsets=[planning.TOOLSET],
+    toolsets=[planning.toolset()],
     # Register the history processor to keep the context clean
-    history_processors=[planning.HISTORY_PROCESSOR],
-    deps_type=Deps,
+    history_processors=[planning.plan_history_processor],
 )
 
 result = agent.run_sync(
     "Create a plan to write a short poem about Python, then write it.",
-    deps=Deps()
 )
 print(result.data)
 ```
