@@ -342,32 +342,6 @@ description: Common issues and solutions for our platform
 **Solution:** ...
 ```
 
-## Integration with Planning
-
-Combine Skills with the Planning system for powerful workflows:
-
-```python
-from pydantic_ai import Agent
-from pydantic_ai_cognitive import Skills, Planning, INSTRUCTION
-
-skills = Skills()
-skills.register_skill("./skills/coding_standards")
-skills.register_skill("./skills/testing_guide")
-
-planning = Planning()
-
-agent = Agent(
-    "openai:gpt-4",
-    toolsets=[skills.toolset(), planning.toolset()],
-    instructions=INSTRUCTION,
-    history_processors=[planning.plan_history_processor]
-)
-
-# Agent can now both plan tasks AND load relevant skill documentation
-result = agent.run_sync(
-    "Create a plan to refactor the authentication module following our coding standards"
-)
-```
 
 ## Advanced Features
 
