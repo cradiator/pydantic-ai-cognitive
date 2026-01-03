@@ -24,7 +24,7 @@ def test_plan_create():
     assert len(planning.steps) == 2
 
 
-def test_plan_mark_step_complete():
+def test_plan_mark_step_complete() -> None:
     planning = Planning()
     planning.plan_create(["Do X", "Do Y"])
 
@@ -39,7 +39,7 @@ def test_plan_mark_step_complete():
     assert "Step 99 not found" in result
 
 
-def test_plan_show_progress():
+def test_plan_show_progress() -> None:
     planning = Planning()
     planning.plan_create(["A", "B"])
     result = planning.plan_show_progress()
@@ -48,18 +48,19 @@ def test_plan_show_progress():
     assert "[ ] 2. B" in result
 
 
-def test_toolset_instructions():
+def test_toolset_instructions() -> None:
     """Verify that the planning instructions are included in the tool description."""
     planning = Planning()
     tools = planning.toolset().tools
     plan_create_tool = tools["plan_create"]
 
     assert plan_create_tool is not None
+    assert plan_create_tool.description is not None
     assert "Planning System Instructions" in plan_create_tool.description
     assert "you MUST call 'plan_create'" in plan_create_tool.description
 
 
-def test_plan_history_processor():
+def test_plan_history_processor() -> None:
     planning = Planning()
     # Setup some timestamps
     ts = datetime.now()
@@ -74,7 +75,7 @@ def test_plan_history_processor():
     # 6. plan_show_progress (new - keep)
     # Also include some user/text parts that should remain
 
-    history = [
+    history: list[ModelRequest | ModelResponse] = [
         # Message 0: User prompt
         ModelRequest(parts=[UserPromptPart(content="Start")], kind="request", timestamp=ts),
         # Message 1: plan_create (OLD) - Call
