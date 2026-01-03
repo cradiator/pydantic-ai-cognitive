@@ -48,6 +48,17 @@ def test_plan_show_progress():
     assert "[ ] 2. B" in result
 
 
+def test_toolset_instructions():
+    """Verify that the planning instructions are included in the tool description."""
+    planning = Planning()
+    tools = planning.toolset().tools
+    plan_create_tool = tools["plan_create"]
+
+    assert plan_create_tool is not None
+    assert "Planning System Instructions" in plan_create_tool.description
+    assert "you MUST call 'plan_create'" in plan_create_tool.description
+
+
 def test_plan_history_processor():
     planning = Planning()
     # Setup some timestamps

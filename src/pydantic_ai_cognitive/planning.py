@@ -34,7 +34,16 @@ class Planning:
         return "\n".join(lines)
 
     def plan_create(self, steps: list[str]) -> str:
-        """Create a new plan with the given steps. Use this to initialize the plan."""
+        """
+        Create a new plan with the given steps. Use this to initialize the plan.
+
+        Planning System Instructions:
+        1. Before processing any request, you MUST call 'plan_create' to generate a step-by-step plan.
+        2. Execute the plan step by step.
+        3. After completing each step, you MUST call 'plan_mark_step_complete' to mark it as done.
+        4. You can check your progress using 'plan_show_progress'.
+        5. Follow the plan strictly.
+        """
         self.steps = [PlanStep(id=i + 1, description=s) for i, s in enumerate(steps)]
         return str(self)
 
@@ -107,13 +116,3 @@ class Planning:
 
     def toolset(self) -> FunctionToolset[object]:
         return FunctionToolset(tools=[self.plan_create, self.plan_mark_step_complete, self.plan_show_progress])
-
-
-INSTRUCTION = """
-Planning System Instructions:
-1. Before processing any request, you MUST call 'plan_create' to generate a step-by-step plan.
-2. Execute the plan step by step.
-3. After completing each step, you MUST call 'plan_mark_step_complete' to mark it as done.
-4. You can check your progress using 'plan_show_progress'.
-5. Follow the plan strictly.
-"""

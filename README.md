@@ -16,7 +16,7 @@ The `planning` module enables agents to create, track, and execute step-by-step 
 
 *   **Planning Class**: `Planning` encapuslates the state of the plan.
 *   **Toolset**: `Planning.toolset()` returns a toolset with bound methods: `plan_create`, `plan_mark_step_complete`, `plan_show_progress`.
-*   **System Prompt**: Includes `INSTRUCTION` to guide the agent in using the planning tools.
+*   **Self-Contained Instructions**: `plan_create` includes system instructions to guide the agent in using the planning tools effectively.
 *   **History Management**: `Planning.plan_history_processor` automatically cleans up redundant planning steps from context, keeping the history token-efficient.
 
 ### Skills
@@ -35,15 +35,13 @@ The `skills` module allows you to organize and dynamically load skill documentat
 
 ```python
 from pydantic_ai import Agent
-from pydantic_ai_cognitive.planning import Planning, INSTRUCTION
+from pydantic_ai_cognitive.planning import Planning
 
 # Instantiate the planning toolset
 planning = Planning()
 
 agent = Agent(
     "openai:gpt-4o",
-    # Add the planning instructions to the system prompt
-    instructions=INSTRUCTION,
     # Register the planning toolset
     toolsets=[planning.toolset()],
     # Register the history processor to keep the context clean
@@ -91,7 +89,6 @@ agent = Agent(
     "openai:gpt-4o",
     # Register the skills toolset
     toolsets=[skills.toolset()],
-    system_prompt="You are a helpful assistant. Use skill_load to access documentation.",
 )
 
 result = agent.run_sync(
@@ -99,30 +96,6 @@ result = agent.run_sync(
 )
 print(result.output)
 # The agent will automatically load the python-best-practices skill to answer
-```
-
-### Combining Planning and Skills
-
-```python
-from pydantic_ai import Agent
-from pydantic_ai_cognitive import Skills, Planning, INSTRUCTION
-
-skills = Skills()
-skills.register_skill("./my_skills")
-
-planning = Planning()
-
-agent = Agent(
-    "openai:gpt-4o",
-    instructions=INSTRUCTION,
-    toolsets=[skills.toolset(), planning.toolset()],
-    history_processors=[planning.plan_history_processor],
-)
-
-result = agent.run_sync(
-    "Create a plan to refactor our auth module following Python best practices.",
-)
-# Agent can both plan tasks AND load relevant skill documentation
 ```
 
 ## Documentation

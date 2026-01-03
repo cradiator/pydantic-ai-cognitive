@@ -1,4 +1,4 @@
-from .planning import INSTRUCTION, Planning
+from .planning import Planning
 from .skills import Skills
 
-__all__ = ["INSTRUCTION", "Planning", "Skills"]
+__all__ = ["Planning", "Skills"]

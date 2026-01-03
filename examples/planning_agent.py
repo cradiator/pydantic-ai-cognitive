@@ -3,7 +3,7 @@ import asyncio
 import history_viewer  # type: ignore[import-not-found]
 from pydantic_ai import Agent
 
-from pydantic_ai_cognitive.planning import INSTRUCTION, Planning
+from pydantic_ai_cognitive.planning import Planning
 
 
 def add(a: int, b: int) -> int:
@@ -18,7 +18,6 @@ planning = Planning()
 
 agent = Agent(
     "google-gla:gemini-flash-lite-latest",
-    instructions=INSTRUCTION,
     toolsets=[planning.toolset()],
     tools=[add, mul],
     history_processors=[planning.plan_history_processor, history_viewer.dump_history],

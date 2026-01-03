@@ -133,9 +133,7 @@ This skill describes a typical Git workflow for collaborative projects.
         agent = Agent(
             "google-gla:gemini-flash-lite-latest",
             toolsets=[skills.toolset()],
-            system_prompt="""You are a helpful coding assistant with access to skill documentation.
-When asked about coding practices or workflows, use the skill_load tool to retrieve relevant information.""",
-            history_processors=[history_viewer.dump_history],
+            system_prompt="You are a helpful coding assistant.",
         )
 
         # Example 1: Ask about Python best practices
@@ -144,6 +142,7 @@ When asked about coding practices or workflows, use the skill_load tool to retri
         print(f"User: {prompt1}")
         result1 = await agent.run(prompt1)
         print(f"Agent: {result1.output}")
+        history_viewer.dump_history(result1.all_messages())
         print()
 
         # Example 2: Ask about Git workflow
@@ -152,6 +151,7 @@ When asked about coding practices or workflows, use the skill_load tool to retri
         print(f"User: {prompt2}")
         result2 = await agent.run(prompt2)
         print(f"Agent: {result2.output}")
+        history_viewer.dump_history(result2.all_messages())
         print()
 
 
