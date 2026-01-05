@@ -26,7 +26,7 @@ The `skills` module allows you to organize and dynamically load skill documentat
 *   **Skills Class**: `Skills` manages a collection of skills stored as markdown files with YAML frontmatter.
 *   **Recursive Registration**: Register all skills from a folder with a single call, supporting nested directory structures.
 *   **Dynamic Toolset**: `Skills.toolset()` creates a tool that provides comprehensive instructions to AI agents on how to load and use skills.
-*   **Artifact Support**: Load skill.md files or additional artifacts (examples, cheatsheets, etc.) referenced within skills.
+*   **Artifact Support**: Load SKILL.md files or additional artifacts (examples, cheatsheets, etc.) referenced within skills.
 
 
 ## Usage
@@ -59,7 +59,7 @@ print(result.output)
 First, create a skill with YAML frontmatter:
 
 ```markdown
-<!-- python_practices/skill.md -->
+<!-- python_practices/SKILL.md -->
 ---
 name: python-best-practices
 description: Guidance on Python coding best practices
@@ -83,7 +83,7 @@ from pydantic_ai_cognitive import Skills
 
 # Register skills from a folder
 skills = Skills()
-skills.register_skill("./my_skills")  # Recursively finds all skill.md files
+skills.register_skill("./my_skills")  # Recursively finds all SKILL.md files
 
 agent = Agent(
     "openai:gpt-4o",

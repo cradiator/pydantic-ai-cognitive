@@ -25,7 +25,7 @@ async def main():
         # Create example skill 1: Python Best Practices
         python_skill = tmpdir_path / "python_best_practices"
         python_skill.mkdir()
-        (python_skill / "skill.md").write_text(
+        (python_skill / "SKILL.md").write_text(
             """---
 name: python-best-practices
 description: Guidance on Python coding best practices and style conventions
@@ -72,7 +72,7 @@ def greet(name: str) -> str:
         # Create example skill 2: Git Workflow
         git_skill = tmpdir_path / "git_workflow"
         git_skill.mkdir()
-        (git_skill / "skill.md").write_text(
+        (git_skill / "SKILL.md").write_text(
             """---
 name: git-workflow
 description: A collaborative Git workflow for team projects

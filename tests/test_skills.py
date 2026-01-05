@@ -12,7 +12,7 @@ def create_skill_with_metadata(
     skill_folder = folder / skill_name.replace("-", "_")
     skill_folder.mkdir()
 
-    skill_md = skill_folder / "skill.md"
+    skill_md = skill_folder / "SKILL.md"
     frontmatter = f"---\nname: {skill_name}\ndescription: {description}\n"
     if license_info:
         frontmatter += f"license: {license_info}\n"
@@ -50,7 +50,7 @@ def test_register_skill_with_license(tmp_path: Path) -> None:
 
 
 def test_register_skill_recursive_search(tmp_path: Path) -> None:
-    """Test that skill.md is found in subdirectories."""
+    """Test that SKILL.md is found in subdirectories."""
     skills = Skills()
 
     # Create nested structure
@@ -59,7 +59,7 @@ def test_register_skill_recursive_search(tmp_path: Path) -> None:
     skill_folder = parent / "actual_skill"
     skill_folder.mkdir()
 
-    skill_md = skill_folder / "skill.md"
+    skill_md = skill_folder / "SKILL.md"
     skill_md.write_text("---\nname: nested-skill\ndescription: A nested skill\n---\n\nContent")
 
     # Register parent folder, should find skill.md in subdirectory
@@ -90,13 +90,13 @@ def test_register_skill_not_a_directory(tmp_path: Path) -> None:
 
 
 def test_register_skill_missing_skill_md(tmp_path: Path) -> None:
-    """Test error when skill.md is missing."""
+    """Test error when SKILL.md is missing."""
     skills = Skills()
 
     skill_folder = tmp_path / "incomplete_skill"
     skill_folder.mkdir()
 
-    with pytest.raises(ValueError, match=r"No skill\.md files found"):
+    with pytest.raises(ValueError, match=r"No SKILL\.md files found"):
         skills.register_skill(skill_folder)
 
 
@@ -107,7 +107,7 @@ def test_register_skill_missing_frontmatter(tmp_path: Path) -> None:
     skill_folder = tmp_path / "no_frontmatter"
     skill_folder.mkdir()
 
-    skill_md = skill_folder / "skill.md"
+    skill_md = skill_folder / "SKILL.md"
     skill_md.write_text("# Just a heading\n\nNo frontmatter here.")
 
     with pytest.raises(ValueError, match="No YAML frontmatter found"):
@@ -121,7 +121,7 @@ def test_register_skill_missing_name_field(tmp_path: Path) -> None:
     skill_folder = tmp_path / "no_name"
     skill_folder.mkdir()
 
-    skill_md = skill_folder / "skill.md"
+    skill_md = skill_folder / "SKILL.md"
     skill_md.write_text("---\ndescription: A description\n---\n\nContent")
 
     with pytest.raises(ValueError, match="Missing required 'name' field"):
@@ -135,7 +135,7 @@ def test_register_skill_missing_description_field(tmp_path: Path) -> None:
     skill_folder = tmp_path / "no_desc"
     skill_folder.mkdir()
 
-    skill_md = skill_folder / "skill.md"
+    skill_md = skill_folder / "SKILL.md"
     skill_md.write_text("---\nname: test-skill\n---\n\nContent")
 
     with pytest.raises(ValueError, match="Missing required 'description' field"):
@@ -149,7 +149,7 @@ def test_register_skill_empty_name(tmp_path: Path) -> None:
     skill_folder = tmp_path / "empty_name"
     skill_folder.mkdir()
 
-    skill_md = skill_folder / "skill.md"
+    skill_md = skill_folder / "SKILL.md"
     skill_md.write_text("---\nname: \ndescription: A description\n---\n\nContent")
 
     with pytest.raises(ValueError, match="Empty 'name' field"):
@@ -163,7 +163,7 @@ def test_register_skill_empty_description(tmp_path: Path) -> None:
     skill_folder = tmp_path / "empty_desc"
     skill_folder.mkdir()
 
-    skill_md = skill_folder / "skill.md"
+    skill_md = skill_folder / "SKILL.md"
     skill_md.write_text("---\nname: test-skill\ndescription: \n---\n\nContent")
 
     with pytest.raises(ValueError, match="Empty 'description' field"):
@@ -171,7 +171,7 @@ def test_register_skill_empty_description(tmp_path: Path) -> None:
 
 
 def test_skill_load_default_artifact(tmp_path: Path) -> None:
-    """Test loading the default skill.md file."""
+    """Test loading the default SKILL.md file."""
     skills = Skills()
 
     skill_folder = create_skill_with_metadata(tmp_path, "my-skill", "My skill description")
@@ -308,7 +308,7 @@ def test_skill_name_from_metadata_not_folder(tmp_path: Path) -> None:
     skill_folder = tmp_path / "folder_name"
     skill_folder.mkdir()
 
-    skill_md = skill_folder / "skill.md"
+    skill_md = skill_folder / "SKILL.md"
     skill_md.write_text("---\nname: actual-skill-name\ndescription: The real name\n---\n\nContent")
 
     skills.register_skill(str(skill_folder))
@@ -329,16 +329,16 @@ def test_register_multiple_skills_from_one_folder(tmp_path: Path) -> None:
     # Create multiple skills in subdirectories
     skill_1 = parent_folder / "skill_1"
     skill_1.mkdir()
-    (skill_1 / "skill.md").write_text("---\nname: python-basics\ndescription: Python basics\n---\n\nContent 1")
+    (skill_1 / "SKILL.md").write_text("---\nname: python-basics\ndescription: Python basics\n---\n\nContent 1")
 
     skill_2 = parent_folder / "skill_2"
     skill_2.mkdir()
-    (skill_2 / "skill.md").write_text("---\nname: python-advanced\ndescription: Advanced Python\n---\n\nContent 2")
+    (skill_2 / "SKILL.md").write_text("---\nname: python-advanced\ndescription: Advanced Python\n---\n\nContent 2")
 
     # Nested skill
     nested = parent_folder / "foo" / "bar"
     nested.mkdir(parents=True)
-    (nested / "skill.md").write_text("---\nname: git-workflow\ndescription: Git workflow guide\n---\n\nContent 3")
+    (nested / "SKILL.md").write_text("---\nname: git-workflow\ndescription: Git workflow guide\n---\n\nContent 3")
 
     # Register all skills with a single call
     skills.register_skill(parent_folder)

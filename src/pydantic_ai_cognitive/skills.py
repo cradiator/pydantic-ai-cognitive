@@ -25,27 +25,27 @@ class Skills:
     Manages a collection of skills that can be loaded and used as tools.
 
     Skills are stored as markdown files with YAML frontmatter metadata.
-    Each skill folder should contain a skill.md file (or skill.md in subdirectories).
+    Each skill folder should contain a SKILL.md file (or SKILL.md in subdirectories).
     """
 
     _skills: dict[str, SkillMetadata] = field(default_factory=dict)
 
     def register_skill(self, skill_folder: str | Path) -> None:
         """
-        Register skills from a folder by searching for skill.md files.
+        Register skills from a folder by searching for SKILL.md files.
 
-        This method recursively searches the skill folder for all skill.md files
+        This method recursively searches the skill folder for all SKILL.md files
         and registers each one. Multiple skills can exist in subdirectories:
-        - skill_folder/skill_1/skill.md
-        - skill_folder/skill_2/skill.md
-        - skill_folder/foo/bar/skill.md
+        - skill_folder/skill_1/SKILL.md
+        - skill_folder/skill_2/SKILL.md
+        - skill_folder/foo/bar/SKILL.md
 
         Args:
             skill_folder: Path to the folder containing skill definitions (str or Path).
 
         Raises:
             FileNotFoundError: If the skill folder doesn't exist.
-            ValueError: If no skill.md files are found or metadata is invalid.
+            ValueError: If no SKILL.md files are found or metadata is invalid.
         """
         folder_path = Path(skill_folder) if isinstance(skill_folder, str) else skill_folder
 
@@ -55,18 +55,18 @@ class Skills:
         if not folder_path.is_dir():
             raise ValueError(f"Skill path must be a directory: {skill_folder}")
 
-        # Recursively search for all skill.md files
-        skill_md_files = list(folder_path.rglob("skill.md"))
+        # Recursively search for all SKILL.md files
+        skill_md_files = list(folder_path.rglob("SKILL.md"))
 
         if not skill_md_files:
-            raise ValueError(f"No skill.md files found in folder: {skill_folder}")
+            raise ValueError(f"No SKILL.md files found in folder: {skill_folder}")
 
-        # Process all skill.md files found
+        # Process all SKILL.md files found
         for skill_md_path in skill_md_files:
-            # Extract metadata from the skill.md file
+            # Extract metadata from the SKILL.md file
             metadata = self._extract_metadata(skill_md_path)
 
-            # Use the skill folder that contains this skill.md
+            # Use the skill folder that contains this SKILL.md
             skill_folder_path = skill_md_path.parent
 
             # Register the skill using the name from metadata
@@ -80,10 +80,10 @@ class Skills:
 
     def _extract_metadata(self, skill_md_path: Path) -> dict[str, str]:
         """
-        Extract metadata from the YAML frontmatter in skill.md.
+        Extract metadata from the YAML frontmatter in SKILL.md.
 
         Args:
-            skill_md_path: Path to the skill.md file.
+            skill_md_path: Path to the SKILL.md file.
 
         Returns:
             Dictionary containing metadata with at least 'name' and 'description'.
@@ -94,7 +94,7 @@ class Skills:
         try:
             content = skill_md_path.read_text(encoding="utf-8")
         except Exception as e:
-            raise ValueError(f"Failed to read skill.md at {skill_md_path}: {e}") from e
+            raise ValueError(f"Failed to read SKILL.md at {skill_md_path}: {e}") from e
 
         # Find YAML frontmatter between --- markers
         frontmatter_pattern = r"^---\s*\n(.*?)\n---\s*\n"
@@ -136,7 +136,7 @@ class Skills:
         Load a skill's content from its folder.
 
         This function loads the content of a skill artifact. If no artifact path
-        is provided or the path is empty, it loads the default skill.md file.
+        is provided or the path is empty, it loads the default SKILL.md file.
 
         This is an AI tool function, so it returns error messages as strings
         rather than raising exceptions.
@@ -144,7 +144,7 @@ class Skills:
         Args:
             skill_name: Name of the skill to load.
             artifact_path: Optional path to a specific artifact file within the skill folder.
-                          If None or empty, loads skill.md.
+                          If None or empty, loads SKILL.md.
 
         Returns:
             The content of the requested skill artifact, or an error message string.
@@ -205,18 +205,18 @@ USAGE INSTRUCTIONS:
 1. When a user asks a question, identify if any registered skill is relevant
 2. Load the appropriate skill using skill_load(skill_name="<name>")
 3. Read and understand the skill content
-4. If necessary and the skill.md references other files (examples, cheatsheets, etc.),
+4. If necessary and the SKILL.md references other files (examples, cheatsheets, etc.),
    you can use this same tool again with artifact_path to load those files
 5. Use the loaded information to provide a comprehensive answer
 
 PARAMETERS:
 - skill_name: The name of the skill to load (required)
 - artifact_path: Optional path to a specific file within the skill folder
-  - If omitted or empty, loads the main skill.md file
+  - If omitted or empty, loads the main SKILL.md file
 
 EXAMPLES:
 - skill_load(skill_name="python-best-practices")
-  # Then if necessary and skill.md mentions "see examples.py":
+  # Then if necessary and SKILL.md mentions "see examples.py":
 - skill_load(skill_name="python-best-practices", artifact_path="examples.py")
 
 Always load relevant skills BEFORE answering questions that fall within their domain.
@@ -241,7 +241,7 @@ If needed for a complete answer, you can load additional referenced files."""
                     },
                     "artifact_path": {
                         "type": ["string", "null"],
-                        "description": "Optional path to a specific artifact file within the skill folder. If None or empty, loads skill.md. If skill.md references other files (e.g., examples.py) and you need them, you can use this same tool again with artifact_path to load them.",
+                        "description": "Optional path to a specific artifact file within the skill folder. If None or empty, loads SKILL.md. If SKILL.md references other files (e.g., examples.py) and you need them, you can use this same tool again with artifact_path to load them.",
                     },
                 },
                 "required": ["skill_name"],

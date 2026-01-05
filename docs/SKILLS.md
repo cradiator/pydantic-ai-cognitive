@@ -5,11 +5,11 @@ The Skills system allows you to organize and dynamically load skill documentatio
 ## Overview
 
 Skills are stored as markdown files with YAML frontmatter metadata. Each skill contains:
-- A `skill.md` file (required) with YAML frontmatter containing metadata
+- A `SKILL.md` file (required) with YAML frontmatter containing metadata
 - Optional additional artifact files that provide supplementary information
 
 The system automatically:
-- Searches recursively for `skill.md` files
+- Searches recursively for `SKILL.md` files
 - Parses YAML frontmatter for metadata
 - Registers skills using the name from metadata (not folder name)
 - Provides comprehensive instructions to AI agents on how to use skills
@@ -18,7 +18,7 @@ The system automatically:
 
 ### 1. Create a Skill with YAML Frontmatter
 
-Create a `skill.md` file with this structure:
+Create a `SKILL.md` file with this structure:
 
 ```markdown
 ---
@@ -57,10 +57,10 @@ skills.register_skill("./my_skills/python_practices")
 
 # Or register multiple skills from one folder with subdirectories
 skills.register_skill("./all_skills")
-# This will find and register ALL skill.md files:
-#   ./all_skills/skill_1/skill.md
-#   ./all_skills/skill_2/skill.md
-#   ./all_skills/foo/bar/skill.md
+# This will find and register ALL SKILL.md files:
+#   ./all_skills/skill_1/SKILL.md
+#   ./all_skills/skill_2/SKILL.md
+#   ./all_skills/foo/bar/SKILL.md
 ```
 
 ### 3. Use with an Agent
@@ -81,7 +81,7 @@ result = agent.run_sync("What are Python best practices?")
 
 ### YAML Frontmatter
 
-The frontmatter MUST be at the beginning of `skill.md`, delimited by `---`:
+The frontmatter MUST be at the beginning of `SKILL.md`, delimited by `---`:
 
 ```markdown
 ---
@@ -108,7 +108,7 @@ Skills can be organized in various ways:
 **Option 1: Direct folder**
 ```
 python_practices/
-  skill.md
+  SKILL.md
   examples.py
 ```
 
@@ -117,12 +117,12 @@ python_practices/
 skills/
   python/
     basics/
-      skill.md
+      SKILL.md
     advanced/
-      skill.md
+      SKILL.md
 ```
 
-The `register_skill()` method recursively searches for ALL `skill.md` files and registers each one found.
+The `register_skill()` method recursively searches for ALL `SKILL.md` files and registers each one found.
 
 ### Additional Artifacts
 
@@ -130,7 +130,7 @@ Include supplementary files alongside `skill.md`:
 
 ```
 my_skill/
-  skill.md
+  SKILL.md
   examples.py
   cheatsheet.md
   reference.json
@@ -153,21 +153,21 @@ The main class for managing skills.
 
 ##### `register_skill(skill_folder: str) -> None`
 
-Register all skills from a folder by recursively searching for `skill.md` files.
+Register all skills from a folder by recursively searching for `SKILL.md` files.
 
 **Parameters:**
 - `skill_folder`: Path to the folder to search
 
 **Behavior:**
-- Recursively searches for ALL `skill.md` files using `rglob`
-- Registers EACH skill.md file found in the folder tree
+- Recursively searches for ALL `SKILL.md` files using `rglob`
+- Registers EACH SKILL.md file found in the folder tree
 - Extracts metadata from YAML frontmatter for each skill
 - Registers using the `name` from metadata (not folder name)
 - Supports multiple skills in subdirectories
 
 **Raises:**
 - `FileNotFoundError`: If the skill folder doesn't exist
-- `ValueError`: If no skill.md files are found, frontmatter is invalid, or required fields are missing
+- `ValueError`: If no SKILL.md files are found, frontmatter is invalid, or required fields are missing
 
 **Example:**
 ```python
@@ -178,9 +178,9 @@ skills.register_skill("./skills/python_coding")
 
 # Register multiple skills from one folder
 # If ./all_skills/ contains:
-#   - skill_1/skill.md
-#   - skill_2/skill.md
-#   - foo/bar/skill.md
+#   - skill_1/SKILL.md
+#   - skill_2/SKILL.md
+#   - foo/bar/SKILL.md
 # All three will be registered with one call
 skills.register_skill("./all_skills")
 ```
@@ -191,7 +191,7 @@ Load a skill's content from its folder.
 
 **Parameters:**
 - `skill_name`: Name of the skill (from frontmatter metadata)
-- `artifact_path`: Optional path to a specific artifact file. If `None` or empty, loads `skill.md`
+- `artifact_path`: Optional path to a specific artifact file. If `None` or empty, loads `SKILL.md`
 
 **Returns:**
 - The content of the requested artifact as a string
@@ -205,7 +205,7 @@ This is an AI tool function, so it returns error messages instead of raising exc
 
 **Example:**
 ```python
-# Load default skill.md
+# Load default SKILL.md
 content = skills.skill_load("python-best-practices")
 
 # Load specific artifact
@@ -350,7 +350,7 @@ description: Common issues and solutions for our platform
 The skill name comes from the metadata, NOT the folder name:
 
 ```markdown
-<!-- In folder: my_python_folder/skill.md -->
+<!-- In folder: my_python_folder/SKILL.md -->
 ---
 name: python-advanced-patterns
 description: Advanced Python patterns and techniques
@@ -365,18 +365,18 @@ content = skills.skill_load("python-advanced-patterns")
 
 ### Recursive Search for Multiple Skills
 
-The system searches recursively and registers ALL `skill.md` files found:
+The system searches recursively and registers ALL `SKILL.md` files found:
 
 ```
 project/
   all_skills/
     python_basics/
-      skill.md  ← Registered as defined in its metadata
+      SKILL.md  ← Registered as defined in its metadata
     python_advanced/
-      skill.md  ← Also registered
+      SKILL.md  ← Also registered
     nested/
       git_tools/
-        skill.md  ← Also registered
+        SKILL.md  ← Also registered
 ```
 
 ```python
